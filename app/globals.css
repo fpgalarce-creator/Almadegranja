@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  background-color: #F9F4EC;
+}
+
+body {
+  font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #2d2417;
+  background-color: #F9F4EC;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container-padding {
+  @apply px-4 md:px-8 lg:px-16;
+}
+
+.section-title {
+  @apply text-3xl md:text-4xl font-heading text-accent-brown mb-6 text-center;
+}
+
+.kraft-card {
+  @apply bg-white shadow-card rounded-2xl border border-kraft/50;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full bg-primary text-white px-3 py-1 text-xs font-semibold;
+}
+
+.button-primary {
+  @apply bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-full transition-colors duration-200 shadow-md;
+}
+
+.button-secondary {
+  @apply border border-primary text-primary hover:bg-primary hover:text-white font-semibold py-3 px-6 rounded-full transition-colors duration-200;
+}
+
+.input-field {
+  @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition;
+}
+
+.label {
+  @apply text-sm font-medium text-accent-brown;
+}
+
+.table-header {
+  @apply text-left text-xs font-semibold uppercase tracking-wide text-accent-brown/70;
+}
+
+.table-cell {
+  @apply text-sm text-accent-brown/90;
+}
