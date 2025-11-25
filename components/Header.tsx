@@ -7,6 +7,7 @@ import { getCurrentUser, logoutUser, User } from "@/lib/auth";
 import { CartDrawer } from "./CartDrawer";
 
 const categoryItems = [
+  { href: "/tienda", label: "Todos" },
   { href: "/tienda?categoria=Huevos", label: "Huevos" },
   { href: "/tienda?categoria=Quesos", label: "Quesos" },
   { href: "/tienda?categoria=Frutos%20secos", label: "Frutos secos" },
@@ -16,7 +17,6 @@ const categoryItems = [
 const navItems = [
   { href: "/", label: "Inicio" },
   { href: "/#como-funciona", label: "¿Cómo funciona?" },
-  { href: "/#categorias", label: "Categorías" },
   { href: "/#contacto", label: "Contacto" },
 ];
 

@@ -13,9 +13,11 @@ const SESSION_KEY = "almadegranja_current_user";
 
 const isBrowser = () => typeof window !== "undefined";
 
+// Credenciales de administrador por defecto para ingresar al panel:
+// email: admin@almadegranja.cl | password: Admin123
 const ensureAdminUser = (users: User[]): User[] => {
-  const exists = users.find((u) => u.email === "admin@almadegranja.cl");
-  if (exists) return users;
+  const hasAdmin = users.some((u) => u.rol === "admin");
+  if (hasAdmin) return users;
   return [
     ...users,
     {

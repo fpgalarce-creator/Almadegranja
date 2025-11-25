@@ -72,7 +72,7 @@ export const updateQuantity = (
 ) => {
   const product = getProductById(productId);
   if (!product) return getCart(user);
-  const safeQuantity = Math.min(Math.max(quantity, 1), product.stock || 1);
+  const safeQuantity = Math.min(Math.max(quantity, 0), product.stock || 0);
   const cart = getCart(user);
   const updated = cart
     .map((item) =>

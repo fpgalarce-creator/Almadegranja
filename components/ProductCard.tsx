@@ -24,8 +24,8 @@ export const ProductCard = ({ product, user, onAdded }: Props) => {
   };
 
   return (
-    <div className="kraft-card p-4 flex flex-col">
-      <div className="relative overflow-hidden rounded-xl">
+    <div className="kraft-card p-4 flex flex-col botanical-corner">
+      <div className="relative overflow-hidden rounded-xl border border-kraft/80 bg-white">
         <img
           src={product.imagenUrl}
           alt={product.nombre}
@@ -41,14 +41,17 @@ export const ProductCard = ({ product, user, onAdded }: Props) => {
         )}
       </div>
       <div className="flex-1 pt-4 space-y-2">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <p className="font-heading text-lg text-accent-brown">{product.nombre}</p>
             <p className="text-sm text-accent-brown/70">{product.categoria}</p>
           </div>
-          <p className="font-semibold text-accent-brown">{formatCLP(product.precio)}</p>
+          <div className="text-right">
+            <p className="font-semibold text-accent-brown">{formatCLP(product.precio)}</p>
+            <p className="text-[11px] text-accent-brown/60">Precio unidad</p>
+          </div>
         </div>
-        <p className="text-sm text-accent-brown/70 leading-relaxed">
+        <p className="text-sm text-accent-brown/80 leading-relaxed">
           {product.descripcion}
         </p>
         <p className="text-xs text-accent-brown/60">{product.stock} en stock</p>

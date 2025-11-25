@@ -27,7 +27,10 @@ a {
 }
 
 .kraft-card {
-  @apply bg-white shadow-card rounded-2xl border border-kraft/50;
+  @apply shadow-card rounded-2xl border border-kraft/60;
+  background: #fdf7ee;
+  background-image: radial-gradient(circle at 12% 20%, rgba(148, 121, 86, 0.07) 0, transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(100, 124, 76, 0.06) 0, transparent 25%);
 }
 
 .badge {
@@ -43,7 +46,7 @@ a {
 }
 
 .input-field {
-  @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition;
+  @apply w-full rounded-xl border border-kraft/80 bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition;
 }
 
 .label {
@@ -56,4 +59,53 @@ a {
 
 .table-cell {
   @apply text-sm text-accent-brown/90;
+}
+
+.paper-section {
+  @apply relative overflow-hidden rounded-3xl border border-kraft/60 bg-white/60;
+  background-image: linear-gradient(135deg, rgba(239, 224, 197, 0.4), rgba(255, 255, 255, 0));
+}
+
+.paper-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M75 12c-6 7-10 17-7 27s12 18 18 24-8 14-18 19-12 11-13 19-5 10-9 8-8-10-8-21 10-22 7-29S29 48 23 41 11 18 22 10s29-7 38-4 15 5 15 6Z' stroke='%23647C4C' stroke-width='4' fill='none' opacity='0.16'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right -30px bottom -10px;
+  pointer-events: none;
+}
+
+.botanical-corner {
+  position: relative;
+  overflow: hidden;
+}
+
+.botanical-corner::before {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M34 150c18-38 54-45 78-66s26-59 51-76' stroke='%234A3320' stroke-width='6' stroke-linecap='round' stroke-opacity='0.18' fill='none'/%3E%3Cpath d='M60 104c4-16 17-27 32-31' stroke='%23647C4C' stroke-width='6' stroke-linecap='round' stroke-opacity='0.3' fill='none'/%3E%3C/svg%3E");
+  background-size: contain;
+  top: -30px;
+  right: -30px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.leaf-accent {
+  position: relative;
+}
+
+.leaf-accent::after {
+  content: "";
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 40c8-6 22-5 30-16 9-13 18-16 18-16s1 10-8 20c-9 10-24 12-34 14' stroke='%23647C4C' stroke-width='6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  left: -14px;
+  bottom: -6px;
+  opacity: 0.55;
 }
