@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductsGrid } from "@/components/ProductsGrid";
-import { Categoria, getProducts, Product } from "@/lib/products";
+import { Categoria, getProducts, Product, PRODUCTS_UPDATED_EVENT } from "@/lib/products";
 import { getCurrentUser } from "@/lib/auth";
 
 const categorias: Array<Categoria | "Todos"> = [
@@ -25,8 +25,17 @@ export default function TiendaPage() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    setProducts(getProducts());
+    const syncProducts = () => setProducts(getProducts());
+    syncProducts();
     setUser(getCurrentUser());
+
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, syncProducts);
+    window.addEventListener("storage", syncProducts);
+
+    return () => {
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, syncProducts);
+      window.removeEventListener("storage", syncProducts);
+    };
   }, []);
 
   useEffect(() => {

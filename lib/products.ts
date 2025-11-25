@@ -12,6 +12,7 @@ export type Product = {
 };
 
 const STORAGE_KEY = "almadegranja_products";
+export const PRODUCTS_UPDATED_EVENT = "almadegranja_products_updated";
 
 const defaultProducts: Product[] = [
   {
@@ -138,6 +139,15 @@ const defaultProducts: Product[] = [
 
 const isBrowser = () => typeof window !== "undefined";
 
+const notifyProductsUpdated = (products: Product[]) => {
+  if (!isBrowser()) return;
+  window.dispatchEvent(
+    new CustomEvent(PRODUCTS_UPDATED_EVENT, {
+      detail: { products },
+    })
+  );
+};
+
 export const getProducts = (): Product[] => {
   if (!isBrowser()) return defaultProducts;
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -155,6 +165,7 @@ export const getProducts = (): Product[] => {
 export const saveProducts = (products: Product[]) => {
   if (!isBrowser()) return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  notifyProductsUpdated(products);
 };
 
 export const upsertProduct = (product: Product) => {

@@ -1,68 +1,90 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
 import { ProductsGrid } from "@/components/ProductsGrid";
 import { Footer } from "@/components/Footer";
-import { getPopularProducts, Product } from "@/lib/products";
+import { Categoria, getProducts, Product, PRODUCTS_UPDATED_EVENT } from "@/lib/products";
 import { getCurrentUser } from "@/lib/auth";
 import { buildWhatsappCustomMessage } from "@/lib/whatsapp";
+
+type CategoryHighlight = {
+  name: Categoria;
+  icon: string;
+  description: string;
+  count: number;
+};
+
+const baseCategories: Record<Categoria, Omit<CategoryHighlight, "count">> = {
+  Huevos: {
+    name: "Huevos",
+    description: "Gallinas libres, alimentación natural y sabor auténtico.",
+    icon: "🥚",
+  },
+  Quesos: {
+    name: "Quesos",
+    description: "Texturas cremosas y curados artesanales para tus tablas.",
+    icon: "🧀",
+  },
+  "Frutos secos": {
+    name: "Frutos secos",
+    description: "Tostados suaves para snacks, repostería y picoteos.",
+    icon: "🌰",
+  },
+  Otros: {
+    name: "Otros",
+    description: "Mieles, mermeladas y preparaciones de temporada.",
+    icon: "🍯",
+  },
+};
 
 export default function HomePage() {
   const [popularProducts, setPopularProducts] = useState<Product[]>([]);
   const [user, setUser] = useState(getCurrentUser());
+  const [categories, setCategories] = useState<CategoryHighlight[]>([]);
+
+  const refreshCatalog = useCallback(() => {
+    const allProducts = getProducts();
+    setPopularProducts(allProducts.filter((product) => product.popular));
+    const counts: Record<Categoria, number> = {
+      Huevos: 0,
+      Quesos: 0,
+      "Frutos secos": 0,
+      Otros: 0,
+    };
+    allProducts.forEach((product) => {
+      counts[product.categoria] += 1;
+    });
+    setCategories(
+      (Object.keys(baseCategories) as Categoria[]).map((categoria) => ({
+        ...baseCategories[categoria],
+        count: counts[categoria],
+      }))
+    );
+  }, []);
 
   useEffect(() => {
-    setPopularProducts(getPopularProducts());
+    refreshCatalog();
     setUser(getCurrentUser());
-  }, []);
+    const handleProductsUpdated = () => refreshCatalog();
+    const handleStorage = () => refreshCatalog();
+
+    window.addEventListener(PRODUCTS_UPDATED_EVENT, handleProductsUpdated);
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      window.removeEventListener(PRODUCTS_UPDATED_EVENT, handleProductsUpdated);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, [refreshCatalog]);
 
   return (
     <>
       <Header />
       <main className="space-y-12 md:space-y-16">
-        <Hero />
-
-        {/* Categorías principales */}
-        <section id="categorias" className="container-padding">
-          <div className="paper-section p-6 md:p-10 space-y-6">
-            <div className="flex items-center justify-between flex-wrap gap-3">
-              <h2 className="section-title mb-0 text-left">Explora por categoría</h2>
-              <a href="/tienda" className="button-secondary text-sm">
-                Ver tienda
-              </a>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {["Huevos", "Quesos", "Frutos secos", "Otros"].map((categoria) => (
-                <div key={categoria} className="kraft-card p-6 space-y-4 flex flex-col botanical-corner">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl">
-                    {categoria === "Huevos" && "🥚"}
-                    {categoria === "Quesos" && "🧀"}
-                    {categoria === "Frutos secos" && "🌰"}
-                    {categoria === "Otros" && "🍯"}
-                  </div>
-                  <div className="space-y-2 flex-1">
-                    <p className="font-heading text-xl text-accent-brown">{categoria}</p>
-                    <p className="text-sm text-accent-brown/70 leading-relaxed">
-                      {categoria === "Huevos" && "Gallinas libres y alimentación natural."}
-                      {categoria === "Quesos" && "Texturas cremosas y curados artesanales."}
-                      {categoria === "Frutos secos" && "Tostados suaves, listos para tus tablas."}
-                      {categoria === "Otros" && "Miel, mermeladas y sabores de temporada."}
-                    </p>
-                  </div>
-                  <a
-                    href={`/tienda?categoria=${encodeURIComponent(categoria)}`}
-                    className="button-secondary text-center"
-                  >
-                    Ver categoría
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Hero categories={categories} />
 
         {/* Productos populares */}
         <section className="container-padding">
