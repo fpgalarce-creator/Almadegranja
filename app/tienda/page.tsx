@@ -60,19 +60,21 @@ export default function TiendaPage() {
     <>
       <Header />
       <main className="container-padding py-10 space-y-8">
-        <div className="bg-white/80 border border-kraft/60 rounded-3xl shadow-card p-6 md:p-8 space-y-6">
+        <div className="paper-section botanical-corner p-6 md:p-8 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-[0.2em] text-primary font-semibold">Catálogo</p>
               <h1 className="font-heading text-4xl text-accent-brown leading-tight">Tienda Alma de Granja</h1>
-              <p className="text-accent-brown/70 text-sm">Elige categoría, busca por nombre o ordena por precio.</p>
+              <p className="text-accent-brown/70 text-sm">
+                Elige categoría, busca por nombre o ordena por precio.
+              </p>
             </div>
             <div className="flex flex-wrap gap-2">
               {categorias.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-sm border transition ${
+                  className={`px-4 py-2 rounded-full text-sm border transition bg-white/70 ${
                     category === cat
                       ? "bg-primary text-white border-primary"
                       : "border-kraft text-accent-brown hover:border-primary/60"
@@ -103,7 +105,7 @@ export default function TiendaPage() {
               </select>
             </div>
             <div className="flex items-center text-sm text-accent-brown/70">
-              <span className="bg-primary/10 text-primary px-3 py-2 rounded-full">
+              <span className="bg-primary/10 text-primary px-3 py-2 rounded-full border border-primary/20">
                 {filtered.length} productos
               </span>
             </div>

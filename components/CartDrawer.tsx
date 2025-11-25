@@ -12,7 +12,7 @@ import {
   removeFromCart,
   updateQuantity,
 } from "@/lib/cart";
-import { buildWhatsappMessage, formatCLP } from "@/lib/whatsapp";
+import { buildWhatsAppOrderMessage, formatCLP } from "@/lib/whatsapp";
 import { User } from "@/lib/auth";
 import { Product } from "@/lib/products";
 
@@ -29,6 +29,12 @@ export const CartDrawer = ({ isOpen, onClose, user, onCartChange }: CartDrawerPr
   const [formaPago, setFormaPago] = useState<"Pagar al llegar" | "Transferencia">(
     "Pagar al llegar"
   );
+
+  useEffect(() => {
+    const storedCart = getCart(user);
+    setCart(storedCart);
+    onCartChange?.(storedCart);
+  }, [user, onCartChange]);
 
   useEffect(() => {
     if (isOpen) {
@@ -87,7 +93,11 @@ export const CartDrawer = ({ isOpen, onClose, user, onCartChange }: CartDrawerPr
   const handleCheckout = () => {
     const cartWithProducts = detailedCart as Array<CartItem & { product: Product }>;
     if (cartWithProducts.length === 0) return;
-    const { whatsappUrl } = buildWhatsappMessage({ cart: cartWithProducts, user, formaPago });
+    const { whatsappUrl } = buildWhatsAppOrderMessage({
+      cart: cartWithProducts,
+      user,
+      formaPago,
+    });
     window.open(whatsappUrl, "_blank");
   };
 
@@ -144,11 +154,13 @@ export const CartDrawer = ({ isOpen, onClose, user, onCartChange }: CartDrawerPr
                     Eliminar
                   </button>
                 </div>
-                <div className="mt-3 flex items-center justify-between">
+                <p className="text-xs text-accent-brown/60 mt-1">Precio unitario: {formatCLP(item.product.precio)}</p>
+                <div className="mt-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => changeQuantity(item.productId, Math.max(1, item.quantity - 1))}
+                      onClick={() => changeQuantity(item.productId, item.quantity - 1)}
                       className="h-8 w-8 rounded-full border border-kraft text-accent-brown"
+                      aria-label={`Restar ${item.product.nombre}`}
                     >
                       -
                     </button>
@@ -156,13 +168,17 @@ export const CartDrawer = ({ isOpen, onClose, user, onCartChange }: CartDrawerPr
                     <button
                       onClick={() => increment(item.productId)}
                       className="h-8 w-8 rounded-full border border-kraft text-accent-brown"
+                      aria-label={`Sumar ${item.product.nombre}`}
                     >
                       +
                     </button>
                   </div>
-                  <p className="text-sm font-semibold text-accent-brown">
-                    {formatCLP(item.product.precio * item.quantity)}
-                  </p>
+                  <div className="text-right">
+                    <p className="text-xs text-accent-brown/60">Subtotal</p>
+                    <p className="text-sm font-semibold text-accent-brown">
+                      {formatCLP(item.product.precio * item.quantity)}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
