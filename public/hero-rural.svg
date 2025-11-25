@@ -1,0 +1,16 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="48" fill="#F9F4EC"/>
+  <circle cx="240" cy="220" r="120" fill="#E9DFC8"/>
+  <circle cx="620" cy="340" r="220" fill="#E0D2B8"/>
+  <circle cx="980" cy="220" r="150" fill="#D7C9A8"/>
+  <rect x="320" y="420" width="560" height="260" rx="48" fill="#FFFFFF" stroke="#DCC8A2" stroke-width="12"/>
+  <rect x="360" y="460" width="200" height="180" rx="24" fill="#F2E9DA" stroke="#C1A46A" stroke-width="10"/>
+  <rect x="420" y="520" width="80" height="80" rx="12" fill="#C1A46A"/>
+  <rect x="620" y="460" width="200" height="180" rx="24" fill="#F2E9DA" stroke="#647C4C" stroke-width="10"/>
+  <rect x="680" y="520" width="80" height="80" rx="12" fill="#647C4C"/>
+  <rect x="540" y="380" width="120" height="80" rx="18" fill="#8A6C46"/>
+  <circle cx="600" cy="370" r="50" fill="#4A3320" opacity="0.12"/>
+  <path d="M480 640C520 620 680 610 720 630" stroke="#4A3320" stroke-width="10" stroke-linecap="round"/>
+  <text x="600" y="720" text-anchor="middle" fill="#4A3320" font-family="'Playfair Display', serif" font-size="54" font-weight="600">Sabores del campo</text>
+  <text x="600" y="770" text-anchor="middle" fill="#4A3320" font-family="'Inter', sans-serif" font-size="24">Huevos, quesos y frutos secos curados con cariño</text>
+</svg>

@@ -7,11 +7,22 @@ export type CartItem = {
 };
 
 const CART_KEY_PREFIX = "almadegranja_cart_";
+export const CART_UPDATED_EVENT = "cart:updated";
 const isBrowser = () => typeof window !== "undefined";
 
 const getKey = (user?: User | null) => {
   const base = user?.email ?? "guest";
   return `${CART_KEY_PREFIX}${base}`;
+};
+
+// Notifica a la UI que el carrito cambió (para contadores, drawer, etc.)
+const emitCartEvent = (items: CartItem[], user?: User | null) => {
+  if (!isBrowser()) return;
+  window.dispatchEvent(
+    new CustomEvent(CART_UPDATED_EVENT, {
+      detail: { items, userEmail: user?.email ?? "guest" },
+    })
+  );
 };
 
 export const getCart = (user?: User | null): CartItem[] => {
@@ -30,15 +41,23 @@ export const getCart = (user?: User | null): CartItem[] => {
 const persist = (items: CartItem[], user?: User | null) => {
   if (!isBrowser()) return;
   localStorage.setItem(getKey(user), JSON.stringify(items));
+  emitCartEvent(items, user);
 };
 
 export const addToCart = (productId: string, user?: User | null) => {
+  const product = getProductById(productId);
+  if (!product || product.stock <= 0) return getCart(user);
+
   const cart = getCart(user);
   const exists = cart.find((item) => item.productId === productId);
+  const nextQuantity = Math.min(
+    (exists?.quantity ?? 0) + 1,
+    product.stock // Respetamos el stock disponible
+  );
   const updated = exists
     ? cart.map((item) =>
         item.productId === productId
-          ? { ...item, quantity: item.quantity + 1 }
+          ? { ...item, quantity: nextQuantity }
           : item
       )
     : [...cart, { productId, quantity: 1 }];
@@ -51,10 +70,13 @@ export const updateQuantity = (
   quantity: number,
   user?: User | null
 ) => {
+  const product = getProductById(productId);
+  if (!product) return getCart(user);
+  const safeQuantity = Math.min(Math.max(quantity, 1), product.stock || 1);
   const cart = getCart(user);
   const updated = cart
     .map((item) =>
-      item.productId === productId ? { ...item, quantity } : item
+      item.productId === productId ? { ...item, quantity: safeQuantity } : item
     )
     .filter((item) => item.quantity > 0);
   persist(updated, user);
@@ -69,6 +91,7 @@ export const removeFromCart = (productId: string, user?: User | null) => {
 
 export const clearCart = (user?: User | null) => {
   persist([], user);
+  return [];
 };
 
 export const getCartTotal = (cart: CartItem[]) =>

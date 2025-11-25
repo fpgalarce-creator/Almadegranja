@@ -6,22 +6,26 @@ const steps = [
     description: "Navega la tienda y arma tu carrito con lo que más te guste.",
   },
   {
-    title: "Confirmas por WhatsApp",
-    description: "Compartes tu pedido, datos y forma de pago para coordinar.",
+    title: "Confirma por WhatsApp",
+    description: "Envías el detalle del carrito y tus datos para coordinar.",
   },
   {
-    title: "Recibes con cariño",
-    description: "Entregamos en tu horario y medio preferido, con atención cercana.",
+    title: "Recibe y disfruta",
+    description: "Programamos la entrega con empaques kraft y mucho cariño.",
+  },
+  {
+    title: "Paga seguro",
+    description: "Elige entre transferencia o pago al recibir tu pedido.",
   },
 ];
 
 export const HowItWorks = () => (
-  <section id="como-funciona" className="container-padding py-12 md:py-16">
+  <section id="como-funciona" className="container-padding">
     <h2 className="section-title">¿Cómo funciona?</h2>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {steps.map((step, index) => (
         <div key={step.title} className="kraft-card p-6 space-y-3">
-          <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-heading text-lg">
+          <div className="h-11 w-11 rounded-full bg-primary/15 text-primary flex items-center justify-center font-heading text-lg">
             {index + 1}
           </div>
           <p className="font-heading text-xl text-accent-brown">{step.title}</p>
