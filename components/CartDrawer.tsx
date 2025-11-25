@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   CartItem,
+  CART_UPDATED_EVENT,
   addToCart,
   clearCart,
   getCart,
@@ -37,8 +38,26 @@ export const CartDrawer = ({ isOpen, onClose, user, onCartChange }: CartDrawerPr
     }
   }, [isOpen, user, onCartChange]);
 
+  useEffect(() => {
+    // Mantiene sincronía si el carrito cambia desde otra parte de la UI
+    const handleExternalUpdate = (event: Event) => {
+      const detail = (event as CustomEvent).detail;
+      if (detail?.userEmail === (user?.email ?? "guest")) {
+        setCart(detail.items as CartItem[]);
+        onCartChange?.(detail.items as CartItem[]);
+      }
+    };
+
+    window.addEventListener(CART_UPDATED_EVENT, handleExternalUpdate);
+    return () => window.removeEventListener(CART_UPDATED_EVENT, handleExternalUpdate);
+  }, [user, onCartChange]);
+
   const detailedCart = useMemo(() => getCartWithDetails(cart), [cart]);
   const total = useMemo(() => getCartTotal(cart), [cart]);
+  const totalItems = useMemo(
+    () => cart.reduce((acc, item) => acc + item.quantity, 0),
+    [cart]
+  );
 
   const handleUpdate = (items: CartItem[]) => {
     setCart(items);
@@ -82,7 +101,7 @@ export const CartDrawer = ({ isOpen, onClose, user, onCartChange }: CartDrawerPr
         onClick={onClose}
       />
       <div
-        className={`absolute right-0 top-0 h-full w-full sm:w-[420px] bg-white shadow-2xl transform transition-transform duration-300 ${
+        className={`absolute right-0 top-0 h-full w-full sm:w-[420px] bg-body shadow-2xl transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -90,7 +109,9 @@ export const CartDrawer = ({ isOpen, onClose, user, onCartChange }: CartDrawerPr
           <div>
             <p className="text-lg font-heading text-accent-brown">Tu carrito</p>
             <p className="text-sm text-accent-brown/70">
-              {cart.length === 0 ? "Aún no agregas productos" : `${cart.length} artículos`}
+              {cart.length === 0
+                ? "Aún no agregas productos"
+                : `${totalItems} artículo${totalItems === 1 ? "" : "s"}`}
             </p>
           </div>
           <button onClick={onClose} className="text-accent-brown/80 hover:text-accent-brown">

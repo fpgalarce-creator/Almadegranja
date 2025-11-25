@@ -34,6 +34,11 @@ export const ProductCard = ({ product, user, onAdded }: Props) => {
         {product.popular && (
           <span className="absolute left-3 top-3 badge">Popular</span>
         )}
+        {product.stock === 0 && (
+          <span className="absolute right-3 top-3 bg-accent-brown text-white text-xs px-3 py-1 rounded-full">
+            Sin stock
+          </span>
+        )}
       </div>
       <div className="flex-1 pt-4 space-y-2">
         <div className="flex items-start justify-between">
@@ -46,6 +51,7 @@ export const ProductCard = ({ product, user, onAdded }: Props) => {
         <p className="text-sm text-accent-brown/70 leading-relaxed">
           {product.descripcion}
         </p>
+        <p className="text-xs text-accent-brown/60">{product.stock} en stock</p>
       </div>
       <button
         onClick={handleAdd}
