@@ -20,7 +20,7 @@ const steps = [
 ];
 
 export const HowItWorks = () => (
-  <section id="como-funciona" className="container-padding">
+  <section id="como-funciona" className="container-padding scroll-mt-28">
     <h2 className="section-title">¿Cómo funciona?</h2>
     <div className="paper-section p-6 md:p-8 space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
